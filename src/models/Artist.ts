@@ -2,12 +2,11 @@ import { Schema, model } from "mongoose";
 
 const artistSchema = new Schema(
   {
-    spotifyId: { type: String, required: true, unique: true },
+    _id: { type: String }, 
     name: { type: String, required: true },
-    followers: { type: Number, default: 0 },
     genres: [{ type: String }],
-    popularity: { type: Number, min: 0, max: 100 },
-    imageUrl: { type: String }
+    imageUrl: { type: String },
+    popularity: { type: Number }
   },
   { timestamps: true }
 );
