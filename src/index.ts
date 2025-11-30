@@ -23,7 +23,7 @@ async function get50Songs(artistName: string) {
   const auth = await spotify.clientCredentialsGrant();
   spotify.setAccessToken(auth.body.access_token);
 
-  console.log("🔑 Access Token Received");
+  console.log("Access Token Received");
 
   const result = await spotify.searchTracks(`artist:${artistName}`, {
     limit: 50
@@ -62,10 +62,10 @@ async function get50Songs(artistName: string) {
 async function run() {
   const songs = await get50Songs("skaiwater");
 
-  console.log(`🎶 Found ${songs.length} songs:\n`);
+  console.log(`Trouver! ${songs.length} musique:\n`);
   console.log(songs);
 
-  console.log("\n🎉 Done!");
+  console.log("\n C'est bon!");
 }
 
 run();
