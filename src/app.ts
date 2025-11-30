@@ -2,6 +2,8 @@ import express, { Application } from "express";
 import dotenv from "dotenv";
 import spotifyRouter from "./routes/spotifyRoutes";
 import { connectDB } from "./config/connectDB";
+// import cors from "cors"; //  pr co avc frontend
+// app.use(cors()); //  pr co avc frontend 
 
 dotenv.config();
 const app: Application = express();
