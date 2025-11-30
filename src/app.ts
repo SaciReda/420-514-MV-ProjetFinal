@@ -1,17 +1,18 @@
 import express, { Application } from "express";
 import dotenv from "dotenv";
 import spotifyRouter from "./routes/spotifyRoutes";
+import authRouter from "./routes/authRoutes";
 import { connectDB } from "./config/connectDB";
-// import cors from "cors"; //  pr co avc frontend
-// app.use(cors()); //  pr co avc frontend 
+
 
 dotenv.config();
 const app: Application = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.use(express.json());
 connectDB();
 
 app.use("/spotify", spotifyRouter);
+app.use("/auth", authRouter);
 
 app.get("/", (req, res) => {
   res.send("api spotifew marche");

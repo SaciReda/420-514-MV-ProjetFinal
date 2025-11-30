@@ -76,7 +76,7 @@ export async function chercherZikController(req: Request, res: Response) {
       }
 
       await saveArtist(Artist2spotify);
-      artist = Artist2spotify;
+      artist = await findArtistByName(artisteNom);
 
       const songs = await get50Songs(artisteNom).catch(() => null);
 
