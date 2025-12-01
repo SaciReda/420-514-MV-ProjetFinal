@@ -59,13 +59,3 @@ async function get50Songs(artistName: string) {
   return tracksWithGenres;
 }
 
-async function run() {
-  const songs = await get50Songs("skaiwater");
-
-  console.log(`Trouver! ${songs.length} musique:\n`);
-  console.log(songs);
-
-  console.log("\n C'est bon!");
-}
-
-run();
