@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import dotenv from "dotenv";
 import spotifyRouter from "./routes/spotifyRoutes";
 import authRouter from "./routes/authRoutes";
+import playlistRouter from "./routes/playlistRoutes";
 import { connectDB } from "./config/connectDB";
 
 
@@ -13,6 +14,7 @@ connectDB();
 
 app.use("/spotify", spotifyRouter);
 app.use("/auth", authRouter);
+app.use("/playlists", playlistRouter);
 
 app.get("/", (req, res) => {
   res.send("api spotifew marche");

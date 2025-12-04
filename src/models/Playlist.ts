@@ -3,9 +3,10 @@ import Song from "./Song";
 
 const PlaylistSchema = new Schema(
   {
+    userId: { type: String, required: true },
     _id: { type: String }, 
     name: { type: String, required: true },
-    musics: [{ type: Song.schema }],    
+    musics: [{ type: String, ref: "Song" }],  
   },
   { timestamps: true }
 );
