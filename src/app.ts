@@ -5,6 +5,7 @@ import fs from "fs";
 import spotifyRouter from "./routes/spotifyRoutes";
 import authRouter from "./routes/authRoutes";
 import playlistRouter from "./routes/playlistRoutes";
+import autoPlaylistRouter from "./routes/autoPlaylistRoutes";
 import { connectDB } from "./config/connectDB";
 
 dotenv.config();
@@ -12,16 +13,21 @@ dotenv.config();
 const app: Application = express();
 const PORT = process.env.PORT || 5000;
 
+
 app.use(express.json());
 connectDB();
+
 
 app.use("/spotify", spotifyRouter);
 app.use("/auth", authRouter);
 app.use("/playlists", playlistRouter);
+app.use("/autoplaylist", autoPlaylistRouter);
+
 
 app.get("/", (req, res) => {
   res.send("api spotifew marche");
 });
+
 
 if (fs.existsSync("./certs/key.pem") && fs.existsSync("./certs/cert.pem")) {
   const httpsOptions = {
@@ -34,6 +40,6 @@ if (fs.existsSync("./certs/key.pem") && fs.existsSync("./certs/cert.pem")) {
   });
 } else {
   app.listen(PORT, () => {
-    console.log(`API HTTP lancée sur http://localhost:${PORT} (certificats manquants)`);
+    console.log(`API HTTP lancée sur http://localhost:${PORT}`);
   });
 }

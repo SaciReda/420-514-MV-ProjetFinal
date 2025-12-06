@@ -12,16 +12,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/spotify/songs/damso",
-					"protocol": "http",
+					"raw": "https://localhost:5000/spotify/songs/niska",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "5000",
 					"path": [
 						"spotify",
 						"songs",
-						"damso"
+						"niska"
 					]
 				}
 			},
@@ -165,6 +165,42 @@
 			"response": []
 		},
 		{
+			"name": "ajouterMusicPlaylist",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MmNkNWNkZDcwMTc0MWExZDk4MjJmMCIsImlhdCI6MTc2NDg4NDA5NCwiZXhwIjoxNzY1NDg4ODk0fQ.MTp1ZJ_RldYi2vmpJ3W3hixT8b28XUExa3lXrNc_v3k",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"songId\": \"2ewjMyCbNv2X1dB2qIDCwD\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/playlists/693202b17725154e05dbf11b/songs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"playlists",
+						"693202b17725154e05dbf11b",
+						"songs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "voirMusicPlaylist",
 			"request": {
 				"method": "GET",
@@ -218,6 +254,108 @@
 					"port": "3000",
 					"path": [
 						"playlists"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "voirPlaylistIdPrecis",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"My Chill Playlist3\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "https://localhost:5000/playlists/693202b17725154e05dbf11b",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"playlists",
+						"693202b17725154e05dbf11b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AutoPlaylistCreer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"year\": 2021\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5000/autoplaylist/year",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoplaylist",
+						"year"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verifMusicPlaylistAuto",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5000/autoplaylist/year/2021",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoplaylist",
+						"year",
+						"2021"
 					]
 				}
 			},
