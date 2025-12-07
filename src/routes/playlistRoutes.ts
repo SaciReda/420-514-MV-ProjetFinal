@@ -14,6 +14,7 @@ router.post("/", protect, createPlaylistController);
 
 router.get("/", protect, getAllPlaylistsController);
 
+
 router.get("/:id", protect, getPlaylistController);
 
 router.get("/:id/songs", protect, getSongsFromPlaylistController);

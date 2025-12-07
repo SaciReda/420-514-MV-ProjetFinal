@@ -14,7 +14,6 @@ export async function createPlaylistController(req: Request, res: Response) {
                 message: "nom est manquant",
             });
         }
-
         const userId = req.user?.id;
         if (!userId) {
             return res.status(401).json({
