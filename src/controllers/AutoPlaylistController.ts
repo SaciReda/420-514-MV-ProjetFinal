@@ -17,7 +17,6 @@ export async function autoPlaylistByYearController(
       });
     }
 
-   
     const songs = await Song.find({
       releaseDate: new RegExp(`^${year}`),
     })
