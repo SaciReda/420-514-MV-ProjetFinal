@@ -4,9 +4,11 @@ import https from "https";
 import fs from "fs";
 import spotifyRouter from "./routes/spotifyRoutes";
 import authRouter from "./routes/authRoutes";
+import topStatsRoutes from "./routes/topStatsRoute";
 import playlistRouter from "./routes/playlistRoutes";
 import autoPlaylistRouter from "./routes/autoPlaylistRoutes";
 import { connectDB } from "./config/connectDB";
+
 
 dotenv.config();
 
@@ -22,6 +24,7 @@ app.use("/spotify", spotifyRouter);
 app.use("/auth", authRouter);
 app.use("/playlists", playlistRouter);
 app.use("/autoplaylist", autoPlaylistRouter);
+app.use("/topstats", topStatsRoutes);
 
 
 app.get("/", (req, res) => {

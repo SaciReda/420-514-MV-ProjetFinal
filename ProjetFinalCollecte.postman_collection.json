@@ -12,7 +12,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5000/spotify/songs/niska",
+					"raw": "https://localhost:5000/spotify/songs/the weekend",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -21,7 +21,7 @@
 					"path": [
 						"spotify",
 						"songs",
-						"niska"
+						"the weekend"
 					]
 				}
 			},
@@ -57,16 +57,46 @@
 		},
 		{
 			"name": "CreerUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse JSON response\r",
+							"let data = pm.response.json();\r",
+							"\r",
+							"// Save token into an environment variable\r",
+							"pm.environment.set(\"token\", data.token);\r",
+							"\r",
+							"// Optional: show in Postman console\r",
+							"console.log(\"Saved token:\", data.token);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"alice3\",\r\n  \"email\": \"alic3@gmail.com\",\r\n  \"password\": \"manac12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:3000/auth/register",
-					"protocol": "http",
+					"raw": "https://localhost:5000/auth/register",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "5000",
 					"path": [
 						"auth",
 						"register"
@@ -328,6 +358,41 @@
 			"response": []
 		},
 		{
+			"name": "AutoPlaylistCreerGenre",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"genre\": \"pop\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5000/autoplaylist/genre",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoplaylist",
+						"genre"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "verifMusicPlaylistAuto",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -356,6 +421,61 @@
 						"autoplaylist",
 						"year",
 						"2021"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verifMusicPlaylistAutoGenre",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5000/autoplaylist/genre/pop",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoplaylist",
+						"genre",
+						"pop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PopularArtists",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5000/topstats/artists/popularity",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"topstats",
+						"artists",
+						"popularity"
 					]
 				}
 			},
