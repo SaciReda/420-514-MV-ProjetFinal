@@ -9,15 +9,14 @@ import playlistRouter from "./routes/playlistRoutes";
 import autoPlaylistRouter from "./routes/autoPlaylistRoutes";
 import { connectDB } from "./config/connectDB";
 
-
 dotenv.config();
 
 const app: Application = express();
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.API_PORT);
+const HOST = process.env.API_HOST;
 
 app.use(express.json());
 connectDB();
-
 
 app.use("/spotify", spotifyRouter);
 app.use("/auth", authRouter);
@@ -25,11 +24,9 @@ app.use("/playlists", playlistRouter);
 app.use("/autoplaylist", autoPlaylistRouter);
 app.use("/topstats", topStatsRoutes);
 
-
 app.get("/", (req, res) => {
   res.send("api spotifew marche");
 });
-
 
 if (fs.existsSync("./certs/key.pem") && fs.existsSync("./certs/cert.pem")) {
   const httpsOptions = {
@@ -37,11 +34,11 @@ if (fs.existsSync("./certs/key.pem") && fs.existsSync("./certs/cert.pem")) {
     cert: fs.readFileSync("./certs/cert.pem"),
   };
 
-  https.createServer(httpsOptions, app).listen(PORT, () => {
-    console.log(`API HTTPS lancée sur https://localhost:${PORT}`);
+  https.createServer(httpsOptions, app).listen(PORT, "0.0.0.0", () => {
+    console.log(`API HTTPS lancée sur ${HOST}:${PORT}`);
   });
 } else {
-  app.listen(PORT, () => {
-    console.log(`API HTTP lancée sur http://localhost:${PORT}`);
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`API HTTP lancée sur ${HOST}:${PORT}`);
   });
 }

@@ -1,0 +1,18 @@
+{
+  "NODE_ENV": "production",
+  "SPOTIFY_CLIENT_ID": "id",
+  "SPOTIFY_CLIENT_SECRET": "secret",
+  "LASTFM_API_KEY": "key",
+  "MONGO_URI": "uri",
+  "API_PORT": "5000",
+
+  "DUCKDNS_TOKEN": "your_duckdns_token_here",
+  "DOMAIN": "your-domain.duckdns.org",
+  "BACKEND_DOMAIN": "your-backend.your-domain.duckdns.org",
+  "TRAEFIK_DOMAIN": "traefik.your-domain.duckdns.org",
+  "API_HOST": "https://your-backend.your-domain.duckdns.org",
+
+  "TRAEFIK_CONTAINER": "traefik",
+  "BACKEND_CONTAINER": "backend",
+  "ACME_EMAIL": "mail@mail.com"
+}
