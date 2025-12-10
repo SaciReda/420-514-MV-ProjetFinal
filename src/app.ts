@@ -35,10 +35,12 @@ if (fs.existsSync("./certs/key.pem") && fs.existsSync("./certs/cert.pem")) {
   };
 
   https.createServer(httpsOptions, app).listen(PORT, "0.0.0.0", () => {
+    console.log("==========================================");
     console.log(`API HTTPS lancée sur ${HOST}:${PORT}`);
   });
 } else {
   app.listen(PORT, "0.0.0.0", () => {
+    console.log("==========================================");
     console.log(`API HTTP lancée sur ${HOST}:${PORT}`);
   });
 }
