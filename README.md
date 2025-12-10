@@ -7,7 +7,7 @@ Projet final du cours de collecte et interprétation de données
 ### Step 1: Clone the Repository
 
 ```bash
-git clone <your-repo-url>
+git clone <https://github.com/SaciReda/420-514-MV-ProjetFinal.git>
 cd 420-514-MV-ProjetFinal
 ```
 
@@ -42,7 +42,7 @@ Once on the EC2 instance:
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone <https://github.com/SaciReda/420-514-MV-ProjetFinal.git>
 cd 420-514-MV-ProjetFinal
 
 # Configure environment variables
