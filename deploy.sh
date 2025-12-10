@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Deploy script for Spotifew Backend Application
-# Run this after configuring your prod.json file with real values
 
 echo "=========================================="
 echo "SPOTIFEW BACKEND DEPLOYMENT"
@@ -24,19 +22,12 @@ if ! command -v jq &> /dev/null; then
 fi
 
 # Export variables from prod.json file
-# Use a safer method to export variables
 while IFS='=' read -r key value; do
     # Remove quotes from value if present
     value=$(echo "$value" | sed 's/^"//;s/"$//')
     export "$key=$value"
 done < <(jq -r 'to_entries[] | "\(.key)=\(.value)"' prod.json)
 echo "Environment variables loaded successfully"
-
-# Verify a few key variables are set (for debugging)
-echo "Verifying key variables..."
-echo "  DOMAIN: ${DOMAIN:-NOT SET}"
-echo "  BACKEND_CONTAINER: ${BACKEND_CONTAINER:-NOT SET}"
-echo "  API_PORT: ${API_PORT:-NOT SET}"
 
 # Validate required environment variables
 echo "Validating environment variables..."
@@ -111,7 +102,16 @@ sudo docker volume prune -f || true
 sudo docker system prune -a --volumes -f || true
 sleep 15
 
-# Start all Docker services
+# ACME certificate : read/write for only for owner of ./data/traefik/letsencryp 
+echo "Setting up ACME certificate storage..."
+mkdir -p ./data/traefik/letsencrypt
+if [ -f ./data/traefik/letsencrypt/acme.json ]; then
+    sudo chmod 600 ./data/traefik/letsencrypt/acme.json
+else
+    touch ./data/traefik/letsencrypt/acme.json
+    sudo chmod 600 ./data/traefik/letsencrypt/acme.json
+fi
+
 # Use sudo -E to preserve environment variables
 echo "Starting Docker services..."
 sudo -E docker compose up -d --build
@@ -129,7 +129,6 @@ echo ""
 echo "Backend logs:"
 sudo docker logs ${BACKEND_CONTAINER} --tail 10 || echo "Backend not running yet"
 
-# Show final status
 echo "=========================================="
 echo "DEPLOYMENT COMPLETE"
 echo "=========================================="
