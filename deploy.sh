@@ -24,8 +24,19 @@ if ! command -v jq &> /dev/null; then
 fi
 
 # Export variables from prod.json file
-eval $(jq -r 'to_entries[] | "export \(.key)=\"\(.value)\""' prod.json)
+# Use a safer method to export variables
+while IFS='=' read -r key value; do
+    # Remove quotes from value if present
+    value=$(echo "$value" | sed 's/^"//;s/"$//')
+    export "$key=$value"
+done < <(jq -r 'to_entries[] | "\(.key)=\(.value)"' prod.json)
 echo "Environment variables loaded successfully"
+
+# Verify a few key variables are set (for debugging)
+echo "Verifying key variables..."
+echo "  DOMAIN: ${DOMAIN:-NOT SET}"
+echo "  BACKEND_CONTAINER: ${BACKEND_CONTAINER:-NOT SET}"
+echo "  API_PORT: ${API_PORT:-NOT SET}"
 
 # Validate required environment variables
 echo "Validating environment variables..."
@@ -94,15 +105,16 @@ sleep 3
 
 # Clean up any existing containers and volumes
 echo "Cleaning up existing containers and volumes..."
-sudo docker compose down -v || true
+sudo -E docker compose down -v || true
 sleep 5
 sudo docker volume prune -f || true
 sudo docker system prune -a --volumes -f || true
 sleep 15
 
 # Start all Docker services
+# Use sudo -E to preserve environment variables
 echo "Starting Docker services..."
-sudo docker compose up -d --build
+sudo -E docker compose up -d --build
 
 echo "Waiting for services to start..."
 sleep 30
@@ -126,8 +138,7 @@ echo "DuckDNS domain updated"
 echo "SSL certificates will be generated automatically"
 echo ""
 echo "Your application should be available at:"
-echo "Backend API:  ${API_HOST}"
-echo "Backend:      https://${BACKEND_DOMAIN}"
+echo "API URL:      https://${BACKEND_DOMAIN}"
 echo "Traefik:      https://${TRAEFIK_DOMAIN}"
 echo ""
 echo "Note: SSL certificates may take a few minutes to generate"
