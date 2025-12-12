@@ -7,7 +7,7 @@
     // Environment Settings
     "module": "commonjs",
     "target": "es6",
-    "types": ["node"],
+    "types": ["node","jest"],
     "resolveJsonModule": true,
 
     // Other Outputs

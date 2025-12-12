@@ -1,0 +1,638 @@
+{
+	"info": {
+		"_postman_id": "7d00771c-cf9d-4c2a-8668-04a387703098",
+		"name": "ProjetFinalCollectePostman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46939953"
+	},
+	"item": [
+		{
+			"name": "VerificationUp",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5000/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"reda\",\n  \"email\": \"reda@gmail.com\",\n  \"password\": \"reda123\"\n}"
+				},
+				"url": {
+					"raw": "https://localhost:5000/auth/register",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let data = pm.response.json();",
+							"pm.collectionVariables.set(\"token\", data.token);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"reda@gmail.com\",\n  \"password\": \"reda123\"\n}"
+				},
+				"url": {
+					"raw": "https://localhost:5000/auth/login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Spotify - Songs by Artist",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5000/spotify/songs/the weeknd",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"spotify",
+						"songs",
+						"the weeknd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Spotify - Search Song",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5000/spotify/search?keyword=flashback",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"spotify",
+						"search"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "flashback"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Playlists - Create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"test123\"\n}"
+				},
+				"url": {
+					"raw": "https://localhost:5000/playlists",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"playlists"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ajouterMusicPlaylist",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"songId\": \"3Iy4j2lCqW8BXGkFk21U6F\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5000/playlists/693c7ccea90a9ea52a3721f7/songs",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"playlists",
+						"693c7ccea90a9ea52a3721f7",
+						"songs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Playlists - Get All",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5000/playlists",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"playlists"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Playlists - Get One",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5000/playlists/693c41171560d352c7b14ce5",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"playlists",
+						"693c41171560d352c7b14ce5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Playlists - Get One by Name",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5000/playlists/by-name/test123",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"playlists",
+						"by-name",
+						"test123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Playlists -Get Details Playlists",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5000/playlists/693c7ccea90a9ea52a3721f7/songs/details",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"playlists",
+						"693c7ccea90a9ea52a3721f7",
+						"songs",
+						"details"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Playlists - DeleteMusique",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"songId\":\"2ewjMyCbNv2X1dB2qIDCwD\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5000/playlists/693c2e98f40bef1acf8bb611/song",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"playlists",
+						"693c2e98f40bef1acf8bb611",
+						"song"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deletePlaylist",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5000/playlists/693c2e98f40bef1acf8bb611",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"playlists",
+						"693c2e98f40bef1acf8bb611"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AutoPlaylist - Create Genre",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"genre\": \"hyperpop\"\n}"
+				},
+				"url": {
+					"raw": "https://localhost:5000/autoplaylist/rap",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoplaylist",
+						"rap"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AutoPlaylist - Verify",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5000/autoplaylist",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoplaylist"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AutoPlaylist - Verify Genre",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5000/autoplaylist/genre/hyperpop",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoplaylist",
+						"genre",
+						"hyperpop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TopStats - Artists Popularity",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5000/topstats/artists/popularity",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"topstats",
+						"artists",
+						"popularity"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TopStats - Artists Nbr Songs",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5000/topstats/artists/song-count",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"topstats",
+						"artists",
+						"song-count"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TopStats - Songs Popularity",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5000/topstats/songs/playcount",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"topstats",
+						"songs",
+						"playcount"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TopStats - Songs Newest",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5000/topstats/songs/newest",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"topstats",
+						"songs",
+						"newest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TopStats - Songs Oldest",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5000/topstats/songs/oldest",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"topstats",
+						"songs",
+						"oldest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TopStats - Genre Popularity",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5000/topstats/genres",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"topstats",
+						"genres"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}

@@ -1,186 +1,239 @@
 import { Request, Response } from "express";
-import mongoose from "mongoose";
-import Playlist from "../models/Playlist";
-import Song from "../models/Song";
-
+import {
+  createPlaylist,
+  getUserPlaylists,
+  getUserPlaylistById,
+  addSongToPlaylist,
+  removeSongFromPlaylist,
+  deletePlaylist,
+  getSongsFromPlaylist,
+  getUserPlaylistByName,
+  getPlaylistSongsDetails
+} from "../services/playlistService";
 
 export async function createPlaylistController(req: Request, res: Response) {
-    try {
-        const { name } = req.body;
+  const { name } = req.body;
+  const userId = req.user?.id;
 
-        if (!name) {
-            return res.status(400).json({
-                success: false,
-                message: "nom est manquant",
-            });
-        }
-        const userId = req.user?.id;
-        if (!userId) {
-            return res.status(401).json({
-                success: false,
-                message: "id pas trouver dans le token",
-            });
-        }
+  if (!name) {
+    return res.status(400).json({ success: false, message: "nom manquant" });
+  }
+  if (!userId) {
+    return res.status(401).json({ success: false, message: "non autorisé" });
+  }
 
-        const _id = new mongoose.Types.ObjectId().toString();
-
-        const playlist = await Playlist.create({
-            _id,
-            userId,
-            name,
-            musics: [],
-        });
-
-        return res.status(201).json({
-            success: true,
-            message: "Playlist created",
-            playlist,
-        });
-
-    } catch (error: any) {
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
+  const playlist = await createPlaylist(userId, name);
+  return res.status(201).json({ success: true, playlist });
 }
 
 
 export async function getAllPlaylistsController(req: Request, res: Response) {
-    try {
-        const playlists = await Playlist.find({ userId: req.user?.id }).lean();
+  const userId = req.user?.id;
+  if (!userId) {
+    return res.status(401).json({ success: false, message: "non autorisé" });
+  }
 
-        return res.json({
-            success: true,
-            count: playlists.length,
-            data: playlists,
-        });
-
-    } catch (error: any) {
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
+  const playlists = await getUserPlaylists(userId);
+  return res.json({ success: true, count: playlists.length, data: playlists });
 }
 
 
 export async function getPlaylistController(req: Request, res: Response) {
-    try {
-        const playlist = await Playlist.findById(req.params.id).lean();
+  const playlistId = req.params.id;
+  const userId = req.user?.id;
 
-        if (!playlist) {
-            return res.status(404).json({
-                success: false,
-                message: "playlist pas trouver",
-            });
-        }
+  if (!playlistId) {
+    return res.status(400).json({ success: false, message: "id manquant" });
+  }
+  if (!userId) {
+    return res.status(401).json({ success: false, message: "non autorisé" });
+  }
 
-        if (playlist.userId !== req.user?.id) {
-            return res.status(403).json({
-                success: false,
-                message: "playlist vous appartient pas",
-            });
-        }
+  const result = await getUserPlaylistById(playlistId, userId);
 
-        return res.json({
-            success: true,
-            data: playlist,
-        });
+  if (result === null)
+    return res
+      .status(404)
+      .json({ success: false, message: "playlist introuvable" });
+  if (result === "forbidden")
+    return res.status(403).json({ success: false, message: "accès refusé" });
 
-    } catch (error: any) {
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
+  return res.json({ success: true, data: result });
 }
 
 
 export async function addSongToPlaylistController(req: Request, res: Response) {
-    try {
-        const playlistId = req.params.id;
-        const { songId } = req.body;
+  const playlistId = req.params.id;
+  const { songId } = req.body;
+  const userId = req.user?.id;
 
-        if (!songId) {
-            return res.status(400).json({
-                success: false,
-                message: "id de la musique necessaire",
-            });
-        }
+  if (!playlistId || !songId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "données manquantes" });
+  }
+  if (!userId) {
+    return res.status(401).json({ success: false, message: "non autorisé" });
+  }
 
-        const song = await Song.findById(songId).lean();
-        if (!song) {
-            return res.status(404).json({
-                success: false,
-                message: "Song not found",
-            });
-        }
+  const result = await addSongToPlaylist(playlistId, songId, userId);
 
-        const playlist = await Playlist.findById(playlistId);
-        if (!playlist) {
-            return res.status(404).json({
-                success: false,
-                message: "playlist pas trouver",
-            });
-        }
+  if (result === "SONG_NOT_FOUND")
+    return res
+      .status(404)
+      .json({ success: false, message: "musique introuvable" });
+  if (result === null)
+    return res
+      .status(404)
+      .json({ success: false, message: "playlist introuvable" });
+  if (result === "forbidden")
+    return res.status(403).json({ success: false, message: "accès refusé" });
 
-        if (playlist.userId !== req.user?.id) {
-            return res.status(403).json({
-                success: false,
-                message: "playlist vous appartient pas",
-            });
-        }
-
-        playlist.musics.push(songId);
-        await playlist.save();
-
-        return res.json({
-            success: true,
-            message: "music dans la playlist mtn",
-            playlist,
-        });
-
-    } catch (error: any) {
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
+  return res.json({ success: true, playlist: result });
 }
 
 
-export async function getSongsFromPlaylistController(req: Request, res: Response) {
-    try {
-        const playlistId = req.params.id;
+export async function removeSongFromPlaylistController(
+  req: Request,
+  res: Response
+) {
+  const playlistId = req.params.id;
+  const { songId } = req.body;
+  const userId = req.user?.id;
 
-        const playlist = await Playlist.findById(playlistId).lean();
-        if (!playlist) {
-            return res.status(404).json({
-                success: false,
-                message: "playlist pas trouver",
-            });
-        }
+  if (!playlistId || !songId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "données manquantes" });
+  }
+  if (!userId) {
+    return res.status(401).json({ success: false, message: "non autorisé" });
+  }
 
-        if (playlist.userId !== req.user?.id) {
-            return res.status(403).json({
-                success: false,
-                message: "playlist vous appartient pas ",
-            });
-        }
+  const result = await removeSongFromPlaylist(playlistId, songId, userId);
 
-        const songs = await Song.find({ _id: { $in: playlist.musics } }).lean();
+  if (result === null)
+    return res
+      .status(404)
+      .json({ success: false, message: "playlist introuvable" });
+  if (result === "forbidden")
+    return res.status(403).json({ success: false, message: "accès refusé" });
+  if (result === "NOT_IN_PLAYLIST")
+    return res
+      .status(404)
+      .json({ success: false, message: "musique absente de la playlist" });
 
-        return res.json({
-            success: true,
-            count: songs.length,
-            songs,
-        });
+  return res.json({ success: true, playlist: result });
+}
 
-    } catch (error: any) {
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
+
+export async function deletePlaylistController(req: Request, res: Response) {
+  const playlistId = req.params.id;
+  const userId = req.user?.id;
+
+  if (!playlistId) {
+    return res.status(400).json({ success: false, message: "id manquant" });
+  }
+  if (!userId) {
+    return res.status(401).json({ success: false, message: "non autorisé" });
+  }
+
+  const result = await deletePlaylist(playlistId, userId);
+
+  if (result === null)
+    return res
+      .status(404)
+      .json({ success: false, message: "playlist introuvable" });
+  if (result === "forbidden")
+    return res.status(403).json({ success: false, message: "accès refusé" });
+
+  return res.json({ success: true, message: "playlist supprimée" });
+}
+
+
+export async function getSongsFromPlaylistController(
+  req: Request,
+  res: Response
+) {
+  const playlistId = req.params.id;
+  const userId = req.user?.id;
+
+  if (!playlistId) {
+    return res.status(400).json({ success: false, message: "id manquant" });
+  }
+  if (!userId) {
+    return res.status(401).json({ success: false, message: "non autorisé" });
+  }
+
+  const result = await getSongsFromPlaylist(playlistId, userId);
+
+  if (result === null)
+    return res
+      .status(404)
+      .json({ success: false, message: "playlist introuvable" });
+  if (result === "forbidden")
+    return res.status(403).json({ success: false, message: "accès refusé" });
+
+  return res.json({ success: true, count: result.length, songs: result });
+}
+
+export async function getPlaylistByNameController(req: Request, res: Response) {
+  const playlistName = req.params.name;
+  const userId = req.user?.id;
+
+  if (!playlistName) {
+    return res.status(400).json({
+      success: false,
+      message: "nom de playlist manquant",
+    });
+  }
+
+  if (!userId) {
+    return res.status(401).json({
+      success: false,
+      message: "non autorisé",
+    });
+  }
+
+  const playlist = await getUserPlaylistByName(userId, playlistName);
+
+  if (!playlist) {
+    return res.status(404).json({
+      success: false,
+      message: `playlist "${playlistName}" introuvable`,
+    });
+  }
+
+  return res.json({
+    success: true,
+    data: playlist,
+  });
+}
+
+export async function getPlaylistSongsDetailsController(req:Request, res:Response) {
+  const playlistId = req.params.id;
+  const userId = req.user?.id;
+
+  if (!playlistId || !userId) {
+    return res.status(400).json({
+      message: "paramètres invalides",
+    });
+  }
+
+  const result = await getPlaylistSongsDetails(
+    playlistId,
+    userId
+  );
+
+  if (result === null)
+    return res.status(404).json({ message: "playlist introuvable" });
+
+  if (result === "forbidden")
+    return res.status(403).json({ message: "accès refusé" });
+
+  res.json({
+    success: true,
+    count: result.length,
+    songs: result,
+  });
 }
