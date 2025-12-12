@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 echo "=========================================="
 echo "SPOTIFEW BACKEND DEPLOYMENT"
 echo "=========================================="
@@ -14,65 +13,6 @@ if [ ! -f prod.json ]; then
     echo "Then edit prod.json with your real values"
     exit 1
 fi
-
-# Check if jq is installed
-if ! command -v jq &> /dev/null; then
-    echo "Installing jq for JSON parsing..."
-    sudo apt-get update && sudo apt-get install -y jq
-fi
-
-# Export variables from prod.json file
-while IFS='=' read -r key value; do
-    # Remove quotes from value if present
-    value=$(echo "$value" | sed 's/^"//;s/"$//')
-    export "$key=$value"
-done < <(jq -r 'to_entries[] | "\(.key)=\(.value)"' prod.json)
-echo "Environment variables loaded successfully"
-
-# Validate required environment variables
-echo "Validating environment variables..."
-required_vars=(
-    "NODE_ENV"
-    "SPOTIFY_CLIENT_ID"
-    "SPOTIFY_CLIENT_SECRET"
-    "LASTFM_API_KEY"
-    "MONGO_URI"
-    "API_PORT"
-    "API_HOST"
-    "DUCKDNS_TOKEN"
-    "DOMAIN"
-    "BACKEND_DOMAIN"
-    "TRAEFIK_DOMAIN"
-    "BACKEND_CONTAINER"
-    "TRAEFIK_CONTAINER"
-    "ACME_EMAIL"
-)
-missing_vars=()
-
-for var in "${required_vars[@]}"; do
-    value="${!var}"
-    # Check if variable is empty, unset, or starts with "your-"
-    if [[ -z "$value" ]] || [[ "$value" == your-* ]]; then
-        missing_vars+=("$var")
-    fi
-done
-
-if [ ${#missing_vars[@]} -ne 0 ]; then
-    echo "Error: The following environment variables are missing from prod.json:"
-    for var in "${missing_vars[@]}"; do
-        echo "   - $var"
-    done
-    echo ""
-    echo "These variables are required for:"
-    echo "  - Docker Compose configuration (compose.yml)"
-    echo "  - Container runtime (loaded via env-cmd from prod.json)"
-    echo ""
-    echo "Please edit your prod.json file with real values:"
-    echo "nano prod.json"
-    exit 1
-fi
-
-echo "All required environment variables are set"
 
 # Get EC2 public IP
 echo "Getting EC2 public IP..."
@@ -104,11 +44,11 @@ sleep 15
 
 # ACME certificate : read/write for only for owner of ./data/traefik/letsencryp 
 echo "Setting up ACME certificate storage..."
-mkdir -p ./data/traefik/letsencrypt
+sudo mkdir -p ./data/traefik/letsencrypt
 if [ -f ./data/traefik/letsencrypt/acme.json ]; then
     sudo chmod 600 ./data/traefik/letsencrypt/acme.json
 else
-    touch ./data/traefik/letsencrypt/acme.json
+    sudo touch ./data/traefik/letsencrypt/acme.json
     sudo chmod 600 ./data/traefik/letsencrypt/acme.json
 fi
 

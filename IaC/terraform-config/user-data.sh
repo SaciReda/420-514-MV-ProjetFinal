@@ -27,10 +27,6 @@ sudo systemctl enable docker
 sudo systemctl start docker
 sleep 3
 
-# Create necessary directories
-echo "Creating necessary directories..."
-mkdir -p data/traefik/letsencrypt
-
 # Infrastructure setup complete
 echo "=========================================="
 echo "INFRASTRUCTURE SETUP COMPLETE"

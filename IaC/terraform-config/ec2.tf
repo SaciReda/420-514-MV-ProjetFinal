@@ -25,7 +25,7 @@ resource "aws_instance" "b4ckend_immo_ec2" {
 
   tags = {
     Name        = "b4ckend-EC2"
-    volume_size = 64
+    volume_size = 32
   }
 
   user_data = file("${path.module}/user-data.sh")

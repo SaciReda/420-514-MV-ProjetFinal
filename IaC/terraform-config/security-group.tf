@@ -1,6 +1,6 @@
 resource "aws_security_group" "b4ckend_sg" {
   name        = "TRAEFIK-PROTOCOL-ACCESS"
-  description = "Allow HTTP, HTTPS, API, and SSH traffic"
+  description = "Allow HTTP, HTTPS, and SSH traffic"
   vpc_id      = aws_vpc.b4ckend_vpc.id
 
   ingress {
