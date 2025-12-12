@@ -13,5 +13,4 @@ router.get("/year/:year", protect, getAutoPlaylistSongsController);
 router.post("/genre", protect, autoPlaylistByGenreController);
 router.get("/genre/:genre", protect, getAutoPlaylistByGenreSongsController);
 
-
 export default router;

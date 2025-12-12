@@ -9,6 +9,9 @@ import playlistRouter from "./routes/playlistRoutes";
 import autoPlaylistRouter from "./routes/autoPlaylistRoutes";
 import { connectDB } from "./config/connectDB";
 import { setupSwagger } from "./swagger";
+import { startAutoPlaylistCron } from "./jobs/autoPlaylist.job";
+
+startAutoPlaylistCron();
 
 
 dotenv.config();
