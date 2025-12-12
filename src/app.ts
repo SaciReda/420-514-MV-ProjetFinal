@@ -8,6 +8,8 @@ import topStatsRoutes from "./routes/topStatsRoute";
 import playlistRouter from "./routes/playlistRoutes";
 import autoPlaylistRouter from "./routes/autoPlaylistRoutes";
 import { connectDB } from "./config/connectDB";
+import { setupSwagger } from "./swagger";
+
 
 dotenv.config();
 
@@ -27,6 +29,8 @@ app.use("/topstats", topStatsRoutes);
 app.get("/", (req, res) => {
   res.send("api spotifew marche");
 });
+setupSwagger(app);
+
 
 if (fs.existsSync("./certs/key.pem") && fs.existsSync("./certs/cert.pem")) {
   const httpsOptions = {

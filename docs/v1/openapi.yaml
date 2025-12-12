@@ -1,0 +1,367 @@
+openapi: 3.0.3
+info:
+  title: Spotifew API - MV Final Project
+  description: API backend du projet 420-514-MV de Saci Reda & Yanis26x - Gestion de playlists intelligentes + stats Spotify + recherche avancée
+  version: 1.2.0
+  contact:
+    name: Saci Reda
+    url: https://github.com/SaciReda/420-514-MV-ProjetFinal
+
+servers:
+  - url: https://localhost:5000
+    description: Serveur local HTTPS (certificats auto-signés)
+  - url: http://localhost:5000
+    description: Serveur local HTTP
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserRegister:
+      type: object
+      required: [email, password, name]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 6 }
+        name: { type: string }
+
+    UserLogin:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string }
+
+    AuthResponse:
+      type: object
+      properties:
+        status: { type: string }
+        token: { type: string }
+        user:
+          type: object
+          properties:
+            id: { type: string }
+            email: { type: string }
+            name: { type: string }
+
+    Song:
+      type: object
+      properties:
+        _id: { type: string }
+        name: { type: string }
+        artistId: { type: string }
+        album: { type: string }
+        releaseDate: { type: string, example: "2023-05-12" }
+        popularity: { type: integer }
+        playCount: { type: integer }
+        genres: { type: array, items: { type: string } }
+
+    Playlist:
+      type: object
+      properties:
+        _id: { type: string }
+        name: { type: string }
+        userId: { type: string }
+        musics: { type: array, items: { type: string } }
+        createdAt: { type: string, format: date-time }
+
+    Error:
+      type: object
+      properties:
+        success: { type: boolean, example: false }
+        message: { type: string }
+
+security:
+  - bearerAuth: []
+
+paths:
+  /:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: API en marche
+          content:
+            text/html:
+              example: "api spotifew marche"
+
+  # ====================== AUTH ======================
+  /auth/register:
+    post:
+      summary: Inscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+      responses:
+        '201':
+          description: Utilisateur créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Email déjà utilisé
+
+  /auth/login:
+    post:
+      summary: Connexion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Connexion réussie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Identifiants incorrects
+
+  # ====================== SPOTIFY ======================
+  /spotify/{artistName}:
+    get:
+      summary: Récupère + sauvegarde les 50 meilleures chansons d’un artiste
+      parameters:
+        - name: artistName
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Succès (peut être en cache ou fraîchement récupéré)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  cached: { type: boolean }
+                  artist: { type: object }
+                  count: { type: integer }
+                  data: { type: array, items: { $ref: '#/components/schemas/Song' } }
+
+  /spotify/search:
+    get:
+      summary: Recherche intelligente d’une musique (ajoute l’artiste complet si besoin)
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema: { type: string }
+        - name: artist
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Musique trouvée (en base ou ajoutée depuis Spotify)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  source: { type: string, enum: [db, spotify+db] }
+                  data: { $ref: '#/components/schemas/Song' }
+
+  # ====================== PLAYLISTS ======================
+  /playlists:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Créer une playlist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+              required: [name]
+      responses:
+        '201':
+          description: Playlist créée
+
+    get:
+      security:
+        - bearerAuth: []
+      summary: Récupérer toutes mes playlists
+      responses:
+        '200':
+          description: Liste des playlists
+
+  /playlists/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Détail d’une playlist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Playlist + chansons
+
+  /playlists/{id}/songs:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Ajouter une chanson à la playlist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                songId: { type: string }
+              required: [songId]
+      responses:
+        '200':
+          description: Chanson ajoutée
+
+    get:
+      security:
+        - bearerAuth: []
+      summary: Récupérer les chansons d’une playlist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Liste des chansons
+
+  # ====================== AUTO PLAYLISTS ======================
+  /autoplaylist/year:
+    post:
+      summary: Générer/Mettre à jour la playlist auto "Top de l’année"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                year: { type: integer, example: 2023 }
+              required: [year]
+      responses:
+        '200':
+          description: Playlist créée ou mise à jour
+
+  /autoplaylist/year/{year}:
+    get:
+      summary: Récupérer les chansons du top de l’année
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Chansons du top année
+
+  /autoplaylist/genre:
+    post:
+      summary: Générer/Mettre à jour la playlist auto par genre
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                genre: { type: string, example: "rap" }
+              required: [genre]
+      responses:
+        '200':
+          description: Playlist genre créée ou mise à jour
+
+  /autoplaylist/genre/{genre}:
+    get:
+      summary: Récupérer les chansons du top d’un genre
+      parameters:
+        - name: genre
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Chansons du genre
+
+  # ====================== TOP STATS ======================
+  /topstats/artists/popularity:
+    get:
+      summary: Top 10 artistes par popularité Spotify
+      responses:
+        '200':
+          description: Liste des 10 artistes les plus populaires
+
+  /topstats/songs/playcount:
+    get:
+      summary: Top 10 chansons par playcount Last.fm
+      responses:
+        '200':
+          description: Top 10
+
+  /topstats/genres:
+    get:
+      summary: Top 10 genres les plus présents
+      responses:
+        '200':
+          description: Top 10 genres
+
+  /topstats/artists/songcount:
+    get:
+      summary: Top 10 artistes avec le plus de chansons dans la DB
+      responses:
+        '200':
+        description: Top 10
+
+  /topstats/years:
+    get:
+      summary: Top 10 années avec le plus de chansons
+      responses:
+        '200':
+          description: Top 10 années
+
+  /topstats/albums:
+    get:
+      summary: Top 10 albums par popularité moyenne
+      responses:
+        '200':
+          description: Top 10
+
+  /topstats/newest:
+    get:
+      summary: 10 chansons les plus récentes
+      responses:
+        '200':
+          description: Top 10 newest
+
+  /topstats/oldest:
+    get:
+      summary: 10 chansons les plus vieilles
+      responses:
+        '200':
+          description: Top 10 oldest
