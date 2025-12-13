@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import dotenv from "dotenv";
 import https from "https";
 import fs from "fs";
+import cors from "cors";
 import spotifyRouter from "./routes/spotifyRoutes";
 import authRouter from "./routes/authRoutes";
 import topStatsRoutes from "./routes/topStatsRoute";
@@ -21,6 +22,15 @@ const PORT = Number(process.env.API_PORT);
 const HOST = process.env.API_HOST;
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://spotifew.4pp.duckdns.org", "https://localhost:5173"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
 connectDB();
 
 app.use("/spotify", spotifyRouter);
