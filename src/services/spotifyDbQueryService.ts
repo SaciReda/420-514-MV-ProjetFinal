@@ -9,7 +9,7 @@ export async function findArtistByName(name: string) {
 }
 
 
-export async function findSongsByArtistId(artistId: string, skip: number = 0, limit: number = 10) {
+export async function findSongsByArtistId(artistId: string, skip: number = 0, limit: number = 4) {
   const query = { artistId };
   const [songs, totalCount] = await Promise.all([
     Song.find(query).skip(skip).limit(limit).lean(),

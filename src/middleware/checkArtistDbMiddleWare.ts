@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { findArtistByName, findSongsByArtistId } from "../services/spotifyDbQueryService";
 
 export async function checkArtistDb(req: Request, res: Response, next: NextFunction) {
-  const artistName: string = req.params.artistName || ""; // oblige type string 
+  const artistName = req.params.artistName; // oblige type string 
   const page = parseInt(req.query.page as string) || 1;
-  const limit = 10;
+  const limit = 4;
   const skip = (page - 1) * limit;
 
   if (!artistName) {
