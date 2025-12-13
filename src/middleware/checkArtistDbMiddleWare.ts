@@ -3,6 +3,9 @@ import { findArtistByName, findSongsByArtistId } from "../services/spotifyDbQuer
 
 export async function checkArtistDb(req: Request, res: Response, next: NextFunction) {
   const artistName: string = req.params.artistName || ""; // oblige type string 
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = 10;
+  const skip = (page - 1) * limit;
 
   if (!artistName) {
     return res.status(400).json({
@@ -20,11 +23,21 @@ export async function checkArtistDb(req: Request, res: Response, next: NextFunct
 
   console.log("artiste trouve en db info");
 
-  const songs = await findSongsByArtistId(artist._id as string); 
+  const { songs, totalCount } = await findSongsByArtistId(artist._id as string, skip, limit);
+  const totalPages = Math.ceil(totalCount / limit);
 
   return res.json({
-   
+    success: true,
+    cached: true,
     artist,
+    pagination: {
+      currentPage: page,
+      totalPages,
+      totalCount,
+      limit,
+      hasNextPage: page < totalPages,
+      hasPreviousPage: page > 1,
+    },
     count: songs.length,
     data: songs
   });

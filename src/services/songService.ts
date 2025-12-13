@@ -21,8 +21,18 @@ export async function fetchAndSaveSongsByArtist(artistName: string) {
   };
 }
 
-export async function searchSongsByKeyword(keyword: string) {
-  return Song.find({
+export async function searchSongsByKeyword(keyword: string, skip: number = 0, limit: number = 10) {
+  const query = {
     name: { $regex: keyword, $options: "i" },
-  }).lean();
+  };
+  
+  const [songs, totalCount] = await Promise.all([
+    Song.find(query).skip(skip).limit(limit).lean(),
+    Song.countDocuments(query)
+  ]);
+  
+  return {
+    songs,
+    totalCount
+  };
 }
