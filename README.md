@@ -1,6 +1,15 @@
 # 420-514-MV-ProjetFinal - Spotifew Backend
 
 Projet final du cours de collecte et interprétation de données
+Notre projet est disponible sur : 
+- **Frontend Website**: `https://spotifew.4pp.duckdns.org`
+- **Frontend Traefik Dashboard**: `https://traefik.4pp.duckdns.org`
+- **Frontend Repo**: `https://github.com/yanis26x/frontend-Sp0ti5.git`
+
+- **Backend API**: `https://spotifew.b4ckend.duckdns.org`
+- **Backend Traefik Dashboard**: `https://traefik.b4ckend.duckdns.org`
+- **Swagger Documentation**: `https://spotifew.b4ckend.duckdns.org/api-docs/`
+- **Backend Repo**: `https://github.com/SaciReda/420-514-MV-ProjetFinal.git`
 
 ## Déploiement
 
