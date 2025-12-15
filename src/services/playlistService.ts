@@ -31,7 +31,7 @@ export async function addSongToPlaylist(
   userId: string
 ) {
   const song = await Song.findById(songId).lean();
-  if (!song) return "SONG_NOT_FOUND";
+  if (!song) return "SongMissing";
 
   const playlist = await Playlist.findById(playlistId);
   if (!playlist) return null;
@@ -52,7 +52,7 @@ export async function removeSongFromPlaylist(
   if (playlist.userId !== userId) return "forbidden";
 
   const index = playlist.musics.indexOf(songId);
-  if (index === -1) return "NOT_IN_PLAYLIST";
+  if (index === -1) return "InconnuPlaylist";
 
   playlist.musics.splice(index, 1);
   await playlist.save();
@@ -102,21 +102,22 @@ export async function getPlaylistSongsDetails(
     _id: { $in: playlist.musics },
   }).lean();
 
-  // Get unique artist IDs from songs
-  const artistIds = [...new Set(songs.map(song => song.artistId))];
-  
-  // Fetch all artists in one query
+  const artistIds = [...new Set(songs.map((song) => song.artistId))];
+
   const artists = await Artist.find({
-    _id: { $in: artistIds }
+    _id: { $in: artistIds },
   }).lean();
 
-  // Create a map of artistId to artist name
-  const artistMap = new Map(artists.map((artist: { _id: any; name: string }) => [artist._id.toString(), artist.name]));
+  const artistMap = new Map(
+    artists.map((artist: { _id: any; name: string }) => [
+      artist._id.toString(),
+      artist.name,
+    ])
+  );
 
-  // Add artistName to each song
-  const songsWithArtists = songs.map(song => ({
+  const songsWithArtists = songs.map((song) => ({
     ...song,
-    artistName: artistMap.get(song.artistId) || 'Unknown Artist'
+    artistName: artistMap.get(song.artistId) || "Artiste inconnu",
   }));
 
   return songsWithArtists;

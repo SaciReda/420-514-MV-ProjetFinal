@@ -32,21 +32,21 @@ export async function searchSongsByKeyword(keyword: string, skip: number = 0, li
     Song.countDocuments(query)
   ]);
 
-  // Get unique artist IDs from songs
+
   const artistIds = [...new Set(songs.map(song => song.artistId))];
   
-  // Fetch all artists in one query
+
   const artists = await Artist.find({
     _id: { $in: artistIds }
   }).lean();
 
-  // Create a map of artistId to artist name
+
   const artistMap = new Map(artists.map((artist: { _id: any; name: string }) => [artist._id.toString(), artist.name]));
 
-  // Add artistName to each song
+
   const songsWithArtists = songs.map(song => ({
     ...song,
-    artistName: artistMap.get(song.artistId) || 'Unknown Artist'
+    artistName: artistMap.get(song.artistId) || 'Artiste inconnu'
   }));
   
   return {
