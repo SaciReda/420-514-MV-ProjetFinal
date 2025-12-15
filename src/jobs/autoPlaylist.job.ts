@@ -12,6 +12,11 @@ const GENRES = [
   "r&b",
   "pop urbaine",
   "bedroom pop",
+  "Japanese indie",
+  "Indie rock",
+  "Rage rap",
+  "Bedroom pop",
+  "Alternative rock",
 ];
 
 export function startAutoPlaylistCron() {
