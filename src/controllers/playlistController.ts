@@ -8,7 +8,7 @@ import {
   deletePlaylist,
   getSongsFromPlaylist,
   getUserPlaylistByName,
-  getPlaylistSongsDetails
+  getPlaylistSongsDetails,
 } from "../services/playlistService";
 
 export async function createPlaylistController(req: Request, res: Response) {
@@ -26,7 +26,6 @@ export async function createPlaylistController(req: Request, res: Response) {
   return res.status(201).json({ success: true, playlist });
 }
 
-
 export async function getAllPlaylistsController(req: Request, res: Response) {
   const userId = req.user?.id;
   if (!userId) {
@@ -36,7 +35,6 @@ export async function getAllPlaylistsController(req: Request, res: Response) {
   const playlists = await getUserPlaylists(userId);
   return res.json({ success: true, count: playlists.length, data: playlists });
 }
-
 
 export async function getPlaylistController(req: Request, res: Response) {
   const playlistId = req.params.id;
@@ -61,7 +59,6 @@ export async function getPlaylistController(req: Request, res: Response) {
   return res.json({ success: true, data: result });
 }
 
-
 export async function addSongToPlaylistController(req: Request, res: Response) {
   const playlistId = req.params.id;
   const { songId } = req.body;
@@ -78,7 +75,7 @@ export async function addSongToPlaylistController(req: Request, res: Response) {
 
   const result = await addSongToPlaylist(playlistId, songId, userId);
 
-  if (result === "SONG_NOT_FOUND")
+  if (result === "SongMissing")
     return res
       .status(404)
       .json({ success: false, message: "musique introuvable" });
@@ -91,7 +88,6 @@ export async function addSongToPlaylistController(req: Request, res: Response) {
 
   return res.json({ success: true, playlist: result });
 }
-
 
 export async function removeSongFromPlaylistController(
   req: Request,
@@ -118,14 +114,13 @@ export async function removeSongFromPlaylistController(
       .json({ success: false, message: "playlist introuvable" });
   if (result === "forbidden")
     return res.status(403).json({ success: false, message: "accès refusé" });
-  if (result === "NOT_IN_PLAYLIST")
+  if (result === "InconnuPlaylist")
     return res
       .status(404)
       .json({ success: false, message: "musique absente de la playlist" });
 
   return res.json({ success: true, playlist: result });
 }
-
 
 export async function deletePlaylistController(req: Request, res: Response) {
   const playlistId = req.params.id;
@@ -149,7 +144,6 @@ export async function deletePlaylistController(req: Request, res: Response) {
 
   return res.json({ success: true, message: "playlist supprimée" });
 }
-
 
 export async function getSongsFromPlaylistController(
   req: Request,
@@ -210,7 +204,10 @@ export async function getPlaylistByNameController(req: Request, res: Response) {
   });
 }
 
-export async function getPlaylistSongsDetailsController(req:Request, res:Response) {
+export async function getPlaylistSongsDetailsController(
+  req: Request,
+  res: Response
+) {
   const playlistId = req.params.id;
   const userId = req.user?.id;
 
@@ -220,10 +217,7 @@ export async function getPlaylistSongsDetailsController(req:Request, res:Respons
     });
   }
 
-  const result = await getPlaylistSongsDetails(
-    playlistId,
-    userId
-  );
+  const result = await getPlaylistSongsDetails(playlistId, userId);
 
   if (result === null)
     return res.status(404).json({ message: "playlist introuvable" });

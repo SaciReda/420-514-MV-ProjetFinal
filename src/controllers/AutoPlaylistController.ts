@@ -7,15 +7,17 @@ import {
   getAutoPlaylistByGenre,
 } from "../services/autoPlaylistService";
 
-
-export async function autoPlaylistByYearController(req: Request, res: Response) {
+export async function autoPlaylistByYearController(
+  req: Request,
+  res: Response
+) {
   try {
     const year = Number(req.body.year);
 
     if (!year || isNaN(year)) {
       return res.status(400).json({
         success: false,
-        message: "mauvaise annee. exemple: { \"year\": 2020 }",
+        message: 'mauvaise annee. exemple: { "year": 2020 }',
       });
     }
 
@@ -34,13 +36,15 @@ export async function autoPlaylistByYearController(req: Request, res: Response) 
         ? `playlist créée pour l'année ${year}`
         : `playlist mise à jour pour l'année ${year}`,
     });
-
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message });
   }
 }
 
-export async function getAutoPlaylistSongsController(req: Request, res: Response) {
+export async function getAutoPlaylistSongsController(
+  req: Request,
+  res: Response
+) {
   try {
     const year = Number(req.params.year);
 
@@ -60,23 +64,22 @@ export async function getAutoPlaylistSongsController(req: Request, res: Response
       count: songs.length,
       songs,
     });
-
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message });
   }
 }
 
-/* =========================================================
-   AUTO PLAYLIST GENRE
-========================================================= */
-export async function autoPlaylistByGenreController(req: Request, res: Response) {
+export async function autoPlaylistByGenreController(
+  req: Request,
+  res: Response
+) {
   try {
     const genre = (req.body.genre || "").trim().toLowerCase();
 
     if (!genre) {
       return res.status(400).json({
         success: false,
-        message: "mauvais genre. exemple: { \"genre\": \"rap\" }",
+        message: 'mauvais genre. exemple: { "genre": "rap" }',
       });
     }
 
@@ -95,7 +98,6 @@ export async function autoPlaylistByGenreController(req: Request, res: Response)
         ? `playlist créée pour le genre "${genre}"`
         : `playlist mise à jour pour le genre "${genre}"`,
     });
-
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message });
   }
@@ -124,7 +126,6 @@ export async function getAutoPlaylistByGenreSongsController(
       count: songs.length,
       songs,
     });
-
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message });
   }

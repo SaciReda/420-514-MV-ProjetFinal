@@ -5,7 +5,6 @@ import {
 } from "../services/songService";
 import { findSongsByArtistId } from "../services/spotifyDbQueryService";
 
-
 export async function getAllSongsController(req: Request, res: Response) {
   try {
     const artistName = req.params.artistName;
@@ -22,8 +21,11 @@ export async function getAllSongsController(req: Request, res: Response) {
 
     const { artist } = await fetchAndSaveSongsByArtist(artistName);
 
-    // Query database with MongoDB pagination
-    const { songs, totalCount } = await findSongsByArtistId(artist.id, skip, limit);
+    const { songs, totalCount } = await findSongsByArtistId(
+      artist.id,
+      skip,
+      limit
+    );
     const totalPages = Math.ceil(totalCount / limit);
 
     return res.json({
@@ -41,9 +43,7 @@ export async function getAllSongsController(req: Request, res: Response) {
       count: songs.length,
       data: songs,
     });
-
   } catch (error: any) {
-    console.error("GET ALL SONGS ERROR:", error);
     return res.status(500).json({
       success: false,
       message: error.message || "appel spotify a échoué",
@@ -51,8 +51,10 @@ export async function getAllSongsController(req: Request, res: Response) {
   }
 }
 
-
-export async function searchSongsByKeywordController(req: Request, res: Response) {
+export async function searchSongsByKeywordController(
+  req: Request,
+  res: Response
+) {
   try {
     const keyword = (req.query.keyword as string)?.trim();
     const page = parseInt(req.query.page as string) || 1;
@@ -66,8 +68,11 @@ export async function searchSongsByKeywordController(req: Request, res: Response
       });
     }
 
-    // Query database with MongoDB pagination
-    const { songs, totalCount } = await searchSongsByKeyword(keyword, skip, limit);
+    const { songs, totalCount } = await searchSongsByKeyword(
+      keyword,
+      skip,
+      limit
+    );
 
     if (totalCount === 0) {
       return res.status(404).json({
@@ -92,9 +97,7 @@ export async function searchSongsByKeywordController(req: Request, res: Response
       count: songs.length,
       songs,
     });
-
   } catch (error: any) {
-    console.error("SEARCH SONG ERROR:", error);
     return res.status(500).json({
       success: false,
       message: error.message || "erreur serveur",
