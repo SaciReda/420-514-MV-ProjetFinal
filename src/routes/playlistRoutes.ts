@@ -22,7 +22,7 @@ router.get("/by-name/:name", protect, getPlaylistByNameController);
 router.get("/:id/songs/details", protect, getPlaylistSongsDetailsController);
 
 router.post("/:id/songs", protect, addSongToPlaylistController);
-router.delete("/:id/song", protect, removeSongFromPlaylistController);
+router.delete("/:id/song/:songId", protect, removeSongFromPlaylistController);
 router.get("/:id/songs", protect, getSongsFromPlaylistController);
 
 router.get("/:id", protect, getPlaylistController);

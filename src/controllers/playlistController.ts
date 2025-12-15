@@ -98,7 +98,7 @@ export async function removeSongFromPlaylistController(
   res: Response
 ) {
   const playlistId = req.params.id;
-  const { songId } = req.body;
+  const songId = req.params.songId;
   const userId = req.user?.id;
 
   if (!playlistId || !songId) {
