@@ -1,22 +1,15 @@
 import swaggerUi from "swagger-ui-express";
-import swaggerJSDoc from "swagger-jsdoc";
 import { Application } from "express";
-
-const options = {
-  definition: {
-    openapi: "3.0.3",
-    info: {
-      title: "Spotifew API - MV Project v1",
-      version: "1.2.0",
-    },
-  },
-  apis: ["./docs/v1/openapi.yaml"], // chemin du fichier YAML
-};
-
-const specs = swaggerJSDoc(options);
+import fs from "fs";
+import path from "path";
+import yaml from "yaml";
 
 export const setupSwagger = (app: Application) => {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
-  app.get("/api-docs.json", (req, res) => res.json(specs));
+  const swaggerDocument = yaml.parse(
+    fs.readFileSync(path.join(__dirname, "../docs/v1/openapi.yaml"), "utf8")
+  );
+
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.get("/api-docs.json", (req, res) => res.json(swaggerDocument));
   console.log("Swagger disponible sur /api-docs");
 };

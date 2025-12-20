@@ -15,11 +15,9 @@ const router = Router();
 
 router.get("/artists/popularity", protect, top10ArtistsByPopularity);
 router.get("/artists/song-count", protect, top10ArtistsBySongCount);
-
 router.get("/songs/playcount", protect, top10SongsByPlaycount);
 router.get("/songs/newest", protect, top10NewestSongs);
 router.get("/songs/oldest", protect, top10OldestSongs);
-
 router.get("/genres", protect, top10Genres);
 router.get("/years", protect, top10Years);
 router.get("/albums", protect, top10Albums);
