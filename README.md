@@ -1,7 +1,7 @@
 # 420-514-MV-ProjetFinal - Spotifew Backend
 
-Projet final du cours de collecte et interprétation de données
-Notre projet est disponible sur : 
+### Our project is available here: 
+
 - **Frontend Website**: `https://spotifew.4pp.duckdns.org`
 - **Frontend Traefik Dashboard**: `https://traefik.4pp.duckdns.org`
 - **Frontend Repo**: `https://github.com/yanis26x/frontend-Sp0ti5.git`
@@ -11,7 +11,67 @@ Notre projet est disponible sur :
 - **Swagger Documentation**: `https://spotifew.b4ckend.duckdns.org/api-docs/`
 - **Backend Repo**: `https://github.com/SaciReda/420-514-MV-ProjetFinal.git`
 
-## Déploiement
+### Important files:
+
+- **PowerPoint**: [here](https://github.com/yanis26x/frontend-Sp0ti5/blob/main/src/assets/PrésentationCollecte.pptx)
+- **Postman Collection**: [here](https://github.com/SaciReda/420-514-MV-ProjetFinal/blob/main/ProjetFinalCollecte.postman_collection.json)
+- **Frontend Dev Config File**: [here](https://github.com/yanis26x/frontend-Sp0ti5/blob/main/dev.json.example)
+- **Frontend Prod Config File**: [here](https://github.com/yanis26x/frontend-Sp0ti5/blob/main/prod.json.example)
+- **Backend Dev Config File**: [here](https://github.com/SaciReda/420-514-MV-ProjetFinal/blob/main/dev.json.example)
+- **Backend Prod Config File**: [here](https://github.com/SaciReda/420-514-MV-ProjetFinal/blob/main/prod.json.example)
+
+### Important Videos:
+
+- **Client Demo**: [here](https://www.youtube.com/watch?v=qkdga0qvQiA)
+- **Technical Demo**: [here](https://www.youtube.com/watch?v=h5Vz9cf4BsY)
+
+## Technology Stack
+
+### Core Platform
+- **Backend**: Node.js with TypeScript, Express.js, and MongoDB with Mongoose ODM (Object Data Modeling)
+- **Authentication**: JWT-Token authentication with bcrypt password hashing
+- **APIs**: Spotify Web API integration for music data, Last.fm for metadata
+- **Database**: MongoDB cloud cluster
+
+### Development Tooling
+- **Testing**: Jest test framework with coverage reporting
+- **API Documentation**: Swagger/OpenAPI with Swagger UI
+- **Environment Management**: Environment-specific configuration with env-cmd
+
+### Infrastructure & DevOps
+- **AWS EC2** (t3.micro) since this is a small project
+- **Docker** containerization for consistent environments
+- **Terraform** for infrastructure as code (IaC) on AWS, provisioning resources (VPC, security groups, and networking)
+- **Git** Version control
+- **Traefik** Reverse proxy and SSL certificate management
+- **DuckDNS** Domain name management
+- **CI/CD**: Automated deployment with Bash scripts and environment configurations
+
+---
+
+## Prerequisites
+
+Before deploying, ensure you have:
+
+- **AWS CLI** - [Prerequisites](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-prereqs.html) | [Installation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- **Terraform** - [Installation Guide](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+- **Git** - For cloning the repository
+- **AWS Account** - With EC2 permissions
+- **DuckDNS** - Domain and account token
+
+---
+
+## Quick Start
+
+### Step 0: AWS CLI Configuration
+
+> **Important**: Configure your AWS credentials before proceeding
+
+- [Set up your AWS CLI credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
+- **Windows**: `C:/Users/yourUser/.aws/credentials`
+- **Linux/Mac**: `~/.aws/credentials`
+
+## Backend Deployment
 
 ### Step 1: Clone the Repository
 
@@ -20,7 +80,7 @@ git clone https://github.com/SaciReda/420-514-MV-ProjetFinal.git
 cd 420-514-MV-ProjetFinal
 ```
 
-### Step 2: Deploy Infrastructure
+### Step 2: Create Network Infrastructure using AWS
 
 ```bash
 cd IaC/terraform-config
@@ -41,8 +101,8 @@ icacls "path\to\your-keypair.pem" /inheritance:r
 icacls "path\to\your-keypair.pem" /remove "Administrators" "SYSTEM" "Users" "Authenticated Users" "Everyone"
 icacls "path\to\your-keypair.pem" /grant:r "yourUser:R"
 
-# SSH into EC2 (get IP from Terraform output)
-ssh -i "your-keypair.pem" ubuntu@<EC2-IP-ADDRESS>
+# SSH into EC2 (get IP from Terraform output in terminal after using terraform apply)
+ssh -i "B4CKEND-keypair.pem" ubuntu@<EC2-IP-ADDRESS>
 ```
 
 ### Step 4: Deploy Application
