@@ -34,7 +34,7 @@
 - **Database**: MongoDB cloud cluster
 
 ### Development Tooling
-- **Testing**: Jest test framework with coverage reporting
+- **Testing**: Jest test framework with 72% test covergae
 - **API Documentation**: Swagger/OpenAPI with Swagger UI
 - **Environment Management**: Environment-specific configuration with env-cmd
 
