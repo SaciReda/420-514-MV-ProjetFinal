@@ -6,7 +6,7 @@ This part of the project aims to deploy a secure, highly available, multi-servic
 
 # AWS Network Infrastructure Diagram
 
-![image](https://raw.githubusercontent.com/manacGrace/REAL-ESTATE-AWS/refs/heads/main/REAL-ESTATE-AWS-INFRASTRUCTURE-AS-CODE/wiki/pictures/infrastructure.png)
+![image](https://raw.githubusercontent.com/manacGrace/REAL-ESTATE-AWS/refs/heads/main/REAL-ESTATE-AWS-SERVICES/wiki/pictures/infrastructure.png)
 
 ---
 
