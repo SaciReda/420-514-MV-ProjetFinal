@@ -138,7 +138,7 @@ describe("playlistService", () => {
       expect(result[0]).toMatchObject({
         name: "Song 1",
         artistId: "unknown",
-        artistName: "Artiste inconnu",
+        artistName: "artiste inconnu",
       });
     });
 
