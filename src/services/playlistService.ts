@@ -65,7 +65,7 @@ export async function deletePlaylist(playlistId: string, userId: string) {
   if (playlist.userId !== userId) return "forbidden";
 
   await Playlist.findByIdAndDelete(playlistId);
-  return true;
+  return playlist;
 }
 
 export async function getSongsFromPlaylist(playlistId: string, userId: string) {
@@ -117,7 +117,7 @@ export async function getPlaylistSongsDetails(
 
   const songsWithArtists = songs.map((song) => ({
     ...song,
-    artistName: artistMap.get(song.artistId) || "Artiste inconnu",
+    artistName: artistMap.get(song.artistId) || "artiste inconnu",
   }));
 
   return songsWithArtists;

@@ -19,7 +19,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
   if (!token) {
     return res.status(401).json({
       status: 'error',
-      message: 'Accès refusé. Token manquant.',
+      message: 'acces refusé. token manquant.',
     });
   }
 

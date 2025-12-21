@@ -174,7 +174,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AuthResponse'
 
-  /spotify/{artistName}:
+  /spotify/songs/{artistName}:
     get:
       summary: Récupérer et sauvegarder les 50 meilleures chansons d’un artiste
       parameters:
@@ -253,6 +253,23 @@ paths:
         '201':
           description: Playlist créée
 
+  /playlists/by-name/{name}:
+    get:
+      summary: Récupérer une playlist par nom
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Playlist trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'
+
   /playlists/{id}:
     get:
       summary: Détails d’une playlist
@@ -281,6 +298,19 @@ paths:
       responses:
         '200':
           description: Playlist supprimée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "playlist supprimée"
+                  data:
+                    $ref: '#/components/schemas/Playlist'
 
   /playlists/{id}/songs:
     post:
@@ -324,15 +354,11 @@ paths:
           required: true
           schema:
             type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              required: [songId]
-              properties:
-                songId:
-                  type: string
+        - name: songId
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Chanson retirée
@@ -412,6 +438,20 @@ paths:
         '200':
           description: Playlist genre
 
+  /topstats/artists/popularity:
+    get:
+      summary: Top 10 artistes par popularité
+      responses:
+        '200':
+          description: OK
+
+  /topstats/artists/song-count:
+    get:
+      summary: Top 10 artistes par nombre de chansons
+      responses:
+        '200':
+          description: OK
+
   /topstats/songs/playcount:
     get:
       summary: Top 10 chansons par playcount
@@ -419,14 +459,14 @@ paths:
         '200':
           description: OK
 
-  /topstats/newest:
+  /topstats/songs/newest:
     get:
       summary: 10 chansons les plus récentes
       responses:
         '200':
           description: OK
 
-  /topstats/oldest:
+  /topstats/songs/oldest:
     get:
       summary: 10 chansons les plus anciennes
       responses:

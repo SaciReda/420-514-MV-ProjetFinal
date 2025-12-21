@@ -12,7 +12,12 @@ import { connectDB } from "./config/connectDB";
 import { setupSwagger } from "./swagger";
 import { startAutoPlaylistCron } from "./jobs/autoPlaylist.job";
 
-startAutoPlaylistCron();
+
+try {
+  startAutoPlaylistCron();
+} catch (error) {
+  console.log("erreur  d'auto-playlist :", error);
+}
 
 
 dotenv.config();
@@ -30,6 +35,15 @@ app.use(
     credentials: true,
   })
 );
+
+
+app.use((req, res, next) => {
+  const logEntry = `${new Date().toISOString()} ${req.method} ${req.originalUrl}\n`;
+  fs.mkdir('./logs', { recursive: true }, () => {
+    fs.appendFile('./logs/logs.txt', logEntry, () => {});
+  });
+  next();
+});
 
 connectDB();
 
