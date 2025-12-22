@@ -16,7 +16,7 @@ Spotifew is a web application that collects, analyzes, and stores music data fro
 ### Important files:
 
 - **PowerPoint**: [here](https://github.com/yanis26x/frontend-Sp0ti5/blob/main/src/assets/PrésentationCollecte.pptx)
-- **Postman Collection**: [here](https://github.com/SaciReda/420-514-MV-ProjetFinal/blob/main/ProjetFinalCollecte.postman_collection.json)
+- **Backend Postman Collection**: [here](https://github.com/SaciReda/420-514-MV-ProjetFinal/blob/main/ProjetFinalCollecte.postman_collection.json)
 - **Frontend Dev Config File**: [here](https://github.com/yanis26x/frontend-Sp0ti5/blob/main/dev.json.example)
 - **Frontend Prod Config File**: [here](https://github.com/yanis26x/frontend-Sp0ti5/blob/main/prod.json.example)
 - **Backend Dev Config File**: [here](https://github.com/SaciReda/420-514-MV-ProjetFinal/blob/main/dev.json.example)
