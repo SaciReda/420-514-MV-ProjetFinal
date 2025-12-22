@@ -1,5 +1,7 @@
 # 420-514-MV-ProjetFinal - Spotifew Backend
 
+Spotifew is a web application that collects, analyzes, and stores music data from the Spotify API. The system processes this data to provide personalized statistics about users' listening habits. This project was developed by a team of 4 students as part of a course.
+
 ### Our project is available here: 
 
 - **Frontend Website**: `https://spotifew.4pp.duckdns.org`
@@ -24,6 +26,10 @@
 
 - **Client Demo**: [here](https://www.youtube.com/watch?v=qkdga0qvQiA)
 - **Technical Demo**: [here](https://www.youtube.com/watch?v=h5Vz9cf4BsY)
+
+### Others:
+
+- **Wiki**: [here](https://github.com/SaciReda/420-514-MV-ProjetFinal/wiki/1.-Infrastructure)
 
 ## Technology Stack
 
