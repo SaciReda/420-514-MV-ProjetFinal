@@ -1,6 +1,6 @@
 # Introduction
 
-This part of the project aims to deploy a secure, highly available, multi-services cloud infrastructure on **AWS** using **Terraform** to simplify and automate the process
+This part of the project aims to deploy a secure, highly available, single-service cloud infrastructure on **AWS** using **Terraform** for our school project backend
 
 ---
 
@@ -57,7 +57,7 @@ This part of the project aims to deploy a secure, highly available, multi-servic
 ### `Security Group`
 
 - **name**: TRAEFIK-PROTOCOL-ACCESS
-- **Description**: Allow HTTP, HTTPS traffic
+- **Description**: Allow HTTP, HTTPS, and SSH traffic
 
 #### Inbound Rules
 
@@ -65,6 +65,7 @@ This part of the project aims to deploy a secure, highly available, multi-servic
 |-------------|----------|----------------|--------------|
 | HTTP        | TCP      | 80             | 0.0.0.0/0    |
 | HTTPS       | TCP      | 443            | 0.0.0.0/0    |
+| SSH         | TCP      | 22             | 0.0.0.0/0    |
 
 #### Outbound Rules
 
@@ -76,6 +77,7 @@ This part of the project aims to deploy a secure, highly available, multi-servic
 
 - **HTTP (Port 80)**: Allows standard web requests.
 - **HTTPS (Port 443)**: Allows access to web requests via Traefik domain names.
+- **SSH (Port 22)**: Allows access to the EC2 instance for remote management.
 
 ---
 
@@ -85,10 +87,10 @@ This part of the project aims to deploy a secure, highly available, multi-servic
 
 | Instance Name                    | Type       | AMI              | VPC                          | Subnet                    | Security Group(s)       |
 |----------------------------------|------------|------------------|------------------------------|---------------------------|-------------------------|
-| SPOTIFEW-SERVICE              | t2.large   | Ubuntu 24.04 LTS | SPOTIFEW-VPC              | SPOTIFEW-PUBLIC-1      | TRAEFIK-PROTOCOL-ACCESS |
+| SPOTIFEW-SERVICE              | t3.micro   | Ubuntu Server 24.04 LTS | SPOTIFEW-VPC              | SPOTIFEW-PUBLIC-1      | TRAEFIK-PROTOCOL-ACCESS |
 
 ### `Additional Information`
 
-- **t2.large**: Offers 8 GB RAM and 2 CPU cores, enough to host all required services.  
-- **64 GB Storage**: To store images and other essential deployment data.  
-- **Ubuntu 24.04 LTS AMI**: Chosen for its Linux environment and familiarity.
+- **t3.micro**: Offers 1 GB RAM and 2 CPU cores, enough for this school project.  
+- **32 GB Storage**: To store images and other essential deployment data.  
+- **Ubuntu Server 24.04 LTS AMI**: Chosen for its Linux environment and familiarity.
